@@ -1,0 +1,27 @@
+{
+  "name": "yii2-kladr",
+  "version": "0.1",
+  "main": "jquery.kladr.min.js",
+  "homepage": "https://github.com/andkon13/yii2-klard",
+  "authors": [
+    {
+      "name": "Andrey Konenkov",
+      "email": "andkon13@gmail.com",
+      "homepage": "https://www.linkedin.com/in/xescoder"
+    }
+  ],
+  "license": "Public Domain",
+  "description": "Widget for yii2 Kladr",
+  "keywords": [
+    "kladr",
+    "yii2"
+  ],
+  "ignore": [
+    "gulpfile.js",
+    "package.json",
+    "*.md"
+  ],
+  "dependencies": {
+    "jquery": ">=1.6"
+  }
+}
