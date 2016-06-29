@@ -4,6 +4,7 @@
   "homepage": "https://github.com/andkon13/yii2-klard",
   "type": "project",
   "license": "BSD-3-Clause",
+  "minimum-stability": "dev",
   "require": {
   },
   "extra": {
