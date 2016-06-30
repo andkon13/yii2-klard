@@ -12,5 +12,10 @@
       "npm-asset-library": "vendor/npm",
       "bower-asset-library": "vendor/bower"
     }
+  },
+  "autoload": {
+    "psr-4": {
+      "andkon\\yii2kladr\\": ""
+    }
   }
 }
