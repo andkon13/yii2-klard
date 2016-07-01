@@ -12,9 +12,7 @@
     "asset-installer-paths": {
       "npm-asset-library": "vendor/npm",
       "bower-asset-library": "vendor/bower",
-      "require-bower": {
-        "jquery.kladr": "*"
-      }
+      "bower-asset/jquery.kladr": "*",
     }
   },
   "autoload": {
