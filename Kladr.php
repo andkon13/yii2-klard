@@ -34,8 +34,14 @@ class Kladr extends InputWidget
 
     public $type;
 
-    static private $inputs = [];
+    public $containerTag = 'span';
+    public $containerOptions = [];
 
+    protected $containerId;
+
+    static protected $inputs = [];
+
+    /** @inheritdoc */
     public function init()
     {
 
@@ -52,41 +58,86 @@ class Kladr extends InputWidget
         KladrAsset::register($this->getView());
     }
 
+    /** @inheritdoc */
     public function run()
     {
+        $this->containerId            = KladrApi::KLADR_CACHE_PREFIX . \Yii::$app->getSecurity()->generateRandomString(10);
+        $this->containerOptions['id'] = $this->containerId;
+        echo Html::beginTag($this->containerTag, $this->containerOptions);
+        $name = explode(']', $this->name);
+        if ($pos = strpos($name[0], '_id')) {
+            $fakeName = substr($name[0], 0, $pos);
+        } else {
+            $fakeName = $name[0] . '_name';
+        }
+        if (isset($name[1])) {
+            $fakeName .= ']';
+        }
+
         $fakeId                    = $this->id . '_kladr';
-        $fakeName                  = $this->name . '_kladr';
-        self::$inputs[$this->type] = [$this->id, $fakeId];
+        self::$inputs[$this->type] = [$this->id, $this->containerId . ' #' . $fakeId];
 
-        $options = array_merge($this->options, ['id' => $fakeId]);
-        $this->registryJsForInput($fakeId, $this->id, $this->value);
+        $options = array_merge($this->options, ['id' => $fakeId, 'data-kladr-id' => $this->value]);
+        $this->registryJsForInput($fakeId, $this->id);
 
-        echo Html::textInput($fakeName, '', $options);
+        $value = $this->value;
+        if ($this->value) {
+            switch ($this->type) {
+                case self::TYPE_BUILDING:
+                    $obj = KladrApi::getBuilding($this->value);
+                    break;
+                case self::TYPE_CITY:
+                    $obj = KladrApi::getCity($this->value);
+                    break;
+                case self::TYPE_STREET:
+                    $obj = KladrApi::getStreet($this->value);
+                    break;
+                default:
+                    $obj = [];
+                    break;
+            }
+            if (isset($obj[0], $obj[0]['name'])) {
+                $value = $obj[0]['name'];
+            }
+        }
+        echo Html::textInput($fakeName, $value, $options);
         $options = array_merge($this->options, ['id' => $this->id]);
         echo Html::hiddenInput($this->name, $this->value, $options);
+        echo Html::endTag($this->containerTag);
     }
 
-    private function registryJsForInput($fakeId, $id, $value = null)
+    /**
+     * @return KladrApi
+     */
+    public static function getKladrApi()
+    {
+        return KladrApi::getInstanse();
+    }
+
+    /** @inheritdoc */
+    protected function registryJsForInput($fakeId, $id)
     {
         switch ($this->type) {
             case self::TYPE_STREET:
-                $script = '$("#' . $fakeId . '")
-                .kladr({type: "' . $this->type . '", parentType: $.kladr.type.city, parentInput:"#' . self::$inputs[self::TYPE_CITY][1] . '"})';
+                $script = '$("#' . $this->containerId . ' #' . $fakeId . '")
+                .kladr({type: "' . $this->type . '", parentType: $.kladr.type.city, 
+                parentInput:"#' . self::$inputs[self::TYPE_CITY][1] . '"})';
                 break;
             case self::TYPE_BUILDING:
-                $script = '$("#' . $fakeId . '")
-                .kladr({type: "' . $this->type . '", parentType: $.kladr.type.street, parentInput:"#' . self::$inputs[self::TYPE_STREET][1] . '"})';
+                $script = '$("#' . $this->containerId . ' #' . $fakeId . '")
+                .kladr({type: "' . $this->type . '", parentType: $.kladr.type.street, 
+                parentInput:"#' . self::$inputs[self::TYPE_STREET][1] . '"})';
                 break;
             case self::TYPE_ZIP:
-                $script = '$("#' . $fakeId . '").kladrZip($("body"))';
+                $script = '$("#' . $this->containerId . ' #' . $fakeId . '").kladrZip($("body"))';
                 break;
             default:
-                $script = '$("#' . $fakeId . '").kladr({type: "' . $this->type . '"})';
+                $script = '$("#' . $this->containerId . ' #' . $fakeId . '").kladr({type: "' . $this->type . '"})';
         }
 
         $script .= '.change(
             function(event){
-                $("#' . $id . '").val($(event.target).attr("data-kladr-id"));
+                $("#' . $this->containerId . ' #' . $id . '").val($(event.target).attr("data-kladr-id"));
             }
         )';
 
