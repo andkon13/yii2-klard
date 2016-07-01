@@ -1,0 +1,25 @@
+{
+  "name": "andkon/yii2kladr",
+  "description": "Widget for yii2 Kladr",
+  "homepage": "https://github.com/andkon13/yii2-klard",
+  "type": "project",
+  "license": "BSD-3-Clause",
+  "minimum-stability": "dev",
+  "require": {
+    "koala-framework/composer-extra-assets": "dev-master"
+  },
+  "extra": {
+    "asset-installer-paths": {
+      "npm-asset-library": "vendor/npm",
+      "bower-asset-library": "vendor/bower",
+      "require-bower": {
+        "jquery.kladr": "*"
+      }
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "andkon\\yii2kladr\\": ""
+    }
+  }
+}
