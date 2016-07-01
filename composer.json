@@ -6,7 +6,7 @@
   "license": "BSD-3-Clause",
   "minimum-stability": "dev",
   "require": {
-      "bower-asset/jquery.kladr": "*",
+      "bower-asset/jquery.kladr": "*"
   },
   "autoload": {
     "psr-4": {
