@@ -62,7 +62,7 @@ class Kladr extends InputWidget
     public function run()
     {
         $this->containerId            = KladrApi::KLADR_CACHE_PREFIX . \Yii::$app->getSecurity()->generateRandomString(10);
-        $this->containerOptions['id'] = $this->containerOptions;
+        $this->containerOptions['id'] = $this->containerId;
         echo Html::beginTag($this->containerTag, $this->containerOptions);
         $name = explode(']', $this->name);
         if ($pos = strpos($name[0], '_id')) {
