@@ -129,8 +129,16 @@ class Kladr extends InputWidget
                 parentInput:"#' . self::$inputs[self::TYPE_STREET][1] . '"})';
                 break;
             case self::TYPE_ZIP:
-                $script = '$("#' . $this->containerId . ' #' . $fakeId . '").kladrZip($("body"))';
-                break;
+                $zipJs = '$("#' . self::$inputs[self::TYPE_BUILDING][1] . '")
+                .kladr("select", function(obj){
+                    if(obj.zip){
+                        $("#' . self::$inputs[self::TYPE_ZIP][0] . '").val(obj.zip);
+                        $("#' . self::$inputs[self::TYPE_ZIP][1] . '").val(obj.zip);
+                    }
+                });';
+                $this->getView()->registerJs($zipJs);
+
+                $script = '$("#' . $this->containerId . ' #' . $fakeId . '")';                break;
             default:
                 $script = '$("#' . $this->containerId . ' #' . $fakeId . '").kladr({type: "' . $this->type . '"})';
         }
