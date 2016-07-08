@@ -1,5 +1,6 @@
 {
   "name": "andkon/yii2kladr",
+  "version":"1.0.0-beta",
   "description": "Widget for yii2 Kladr",
   "homepage": "https://github.com/andkon13/yii2-klard",
   "type": "project",
