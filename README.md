@@ -1,7 +1,10 @@
 # yii2-klard
 widgets for easy integration kladr.ru in Yii2
 
-example:
+install:
+composer require andkon/yii2kladr
+
+use:
 $address = new Address(); // your address model
 $form = ActiveForm::begin();
 echo $form->field($address, 'city_id')
