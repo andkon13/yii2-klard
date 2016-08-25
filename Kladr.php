@@ -44,7 +44,6 @@ class Kladr extends InputWidget
     /** @inheritdoc */
     public function init()
     {
-
         if (!$this->type) {
             throw new \Exception('Need set type');
         }
@@ -81,7 +80,7 @@ class Kladr extends InputWidget
         $this->registryJsForInput($fakeId, $this->id);
 
         $value = $this->value;
-        if ($this->value) {
+        if ($this->value && !isset($this->options['value'])) {
             switch ($this->type) {
                 case self::TYPE_BUILDING:
                     $obj = KladrApi::getBuilding($this->value);
@@ -99,6 +98,8 @@ class Kladr extends InputWidget
             if (isset($obj[0], $obj[0]['name'])) {
                 $value = $obj[0]['name'];
             }
+        } else {
+            $value = $this->options['value'];
         }
         echo Html::textInput($fakeName, $value, $options);
         $options = array_merge($this->options, ['id' => $this->id]);
