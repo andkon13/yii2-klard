@@ -99,7 +99,7 @@ class Kladr extends InputWidget
                 $value = $obj[0]['name'];
             }
         } else {
-            $value = $this->options['value'];
+            $value = $this->options['value'] ?? $value;
         }
         echo Html::textInput($fakeName, $value, $options);
         $options = array_merge($this->options, ['id' => $this->id]);
