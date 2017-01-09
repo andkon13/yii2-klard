@@ -11,7 +11,7 @@ use yii\web\AssetBundle;
  */
 class KladrAsset extends AssetBundle
 {
-    public $sourcePath = '@common/components/yii2kladr/assets/kladrapi-jsclient/';
+    public $sourcePath = '@vendor/bower/jquery.kladr';
     public $css = [
         'jquery.kladr.min.css'
     ];

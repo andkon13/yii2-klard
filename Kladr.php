@@ -44,7 +44,6 @@ class Kladr extends InputWidget
     /** @inheritdoc */
     public function init()
     {
-
         if (!$this->type) {
             throw new \Exception('Need set type');
         }
@@ -81,7 +80,7 @@ class Kladr extends InputWidget
         $this->registryJsForInput($fakeId, $this->id);
 
         $value = $this->value;
-        if ($this->value) {
+        if ($this->value && !isset($this->options['value'])) {
             switch ($this->type) {
                 case self::TYPE_BUILDING:
                     $obj = KladrApi::getBuilding($this->value);
@@ -99,6 +98,8 @@ class Kladr extends InputWidget
             if (isset($obj[0], $obj[0]['name'])) {
                 $value = $obj[0]['name'];
             }
+        } else {
+            $value = $this->options['value'] ?? $value;
         }
         echo Html::textInput($fakeName, $value, $options);
         $options = array_merge($this->options, ['id' => $this->id]);
@@ -129,8 +130,16 @@ class Kladr extends InputWidget
                 parentInput:"#' . self::$inputs[self::TYPE_STREET][1] . '"})';
                 break;
             case self::TYPE_ZIP:
-                $script = '$("#' . $this->containerId . ' #' . $fakeId . '").kladrZip($("body"))';
-                break;
+                $zipJs = '$("#' . self::$inputs[self::TYPE_BUILDING][1] . '")
+                .kladr("select", function(obj){
+                    if(obj.zip){
+                        $("#' . self::$inputs[self::TYPE_ZIP][0] . '").val(obj.zip);
+                        $("#' . self::$inputs[self::TYPE_ZIP][1] . '").val(obj.zip);
+                    }
+                });';
+                $this->getView()->registerJs($zipJs);
+
+                $script = '$("#' . $this->containerId . ' #' . $fakeId . '")';                break;
             default:
                 $script = '$("#' . $this->containerId . ' #' . $fakeId . '").kladr({type: "' . $this->type . '"})';
         }
