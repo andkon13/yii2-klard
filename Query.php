@@ -29,6 +29,7 @@ class Query
     public $withParent;
     /** @var  string Ограничение количества возвращаемых объектов */
     public $limit;
+    public $regionId;
     public $cityId;
     public $streetId;
     public $buildingId;
@@ -53,6 +54,12 @@ class Query
                 $string .= '&';
             }
             $string .= 'contentType=' . $this->contentType;
+        }
+        if ($this->regionId) {
+            if (!empty($string)) {
+                $string .= '&';
+            }
+            $string .= 'regionId=' . $this->regionId;
         }
         if ($this->cityId) {
             if (!empty($string)) {

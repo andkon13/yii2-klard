@@ -99,7 +99,8 @@ class Kladr extends InputWidget
                 $value = $obj[0]['name'];
             }
         } else {
-            $value = $this->options['value'] ?? $value;
+            $value = (is_array($this->options) && array_key_exists('value', $this->options))
+                ? $this->options['value'] : $value;
         }
         echo Html::textInput($fakeName, $value, $options);
         $options = array_merge($this->options, ['id' => $this->id]);
@@ -139,7 +140,8 @@ class Kladr extends InputWidget
                 });';
                 $this->getView()->registerJs($zipJs);
 
-                $script = '$("#' . $this->containerId . ' #' . $fakeId . '")';                break;
+                $script = '$("#' . $this->containerId . ' #' . $fakeId . '")';
+                break;
             default:
                 $script = '$("#' . $this->containerId . ' #' . $fakeId . '").kladr({type: "' . $this->type . '"})';
         }
